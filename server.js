@@ -33,31 +33,12 @@ app.get('/todos', function(req, res) {
 	}
 
 	db.todo.findAll({
-			where: where
-		}).then(function(todos) {
-			res.json(todos);
-		}, function(e) {
-			res.status(500).send();
-		})
-		//var filteredTodos = todos;
-
-	//if (queryParams.hasOwnProperty('completed') && queryParams.completed === 'true') {
-	//	filteredTodos = _.where(filteredTodos, {
-	//		completed: true
-	//	});
-	//} else if (queryParams.hasOwnProperty('completed') && queryParams.completed === 'false') {
-	//	filteredTodos = _.where(filteredTodos, {
-	//		completed: false
-	//	});
-	//}
-
-	//if (queryParams.hasOwnProperty('q') && queryParams.q.length > 0) {
-	//	filteredTodos = _.filter(filteredTodos, function(todo) {
-	//		return todo.description.toLowerCase().indexOf(queryParams.q.toLowerCase()) > -1;
-	//	})
-	//}
-
-	//res.json(filteredTodos);
+		where: where
+	}).then(function(todos) {
+		res.json(todos);
+	}, function(e) {
+		res.status(500).send();
+	})
 });
 
 
@@ -75,18 +56,6 @@ app.get('/todos/:id', function(req, res) {
 	}, function(e) {
 		res.status(500).send();
 	})
-
-	//var matchedTodo = _.findWhere(todos, {
-	//	id: todoId
-	//});
-
-
-	//if (matchedTodo) {
-	//	res.json(matchedTodo);
-	//} else {
-	//	res.status(404).send();
-	//}
-
 });
 
 
@@ -102,7 +71,6 @@ app.post('/todos', function(req, res) {
 		res.status(400).json(e);
 
 	});
-
 });
 
 // DELETE /todos/:id
@@ -125,19 +93,6 @@ app.delete('/todos/:id', function(req, res) {
 	}, function() {
 		res.status(500).send();
 	});
-	//var matchedTodo = _.findWhere(todos, {
-	//	id: todoId
-	//});
-
-	//if (!matchedTodo) {
-	//	res.status(404).json({
-	//		"error": "no todo found with that id"
-	//	});
-	//} else {
-	//	todos = _.without(todos, matchedTodo);
-	//	res.json(matchedTodo);
-	//}
-
 });
 
 
@@ -168,36 +123,20 @@ app.put('/todos/:id', function(req, res) {
 	}, function() {
 		res.status(500).send();
 	});
+});
 
 
-	//var matchedTodo = _.findWhere(todos, {
-	//	id: todoId
-	//});
-	//var body = _.pick(req.body, 'description', 'completed');
-	//var validAttributes = {};
+// POST /users
+app.post('/users', function(req, res) {
 
-	//if (!matchedTodo) {
-	//	res.status(404).send();
-	//}
+	//remove unnecessary data
+	var body = _.pick(req.body, 'email', 'password');
 
-	//if (body.hasOwnProperty('completed') && _.isBoolean(body.completed)) {
-	//	validAttributes.completed = body.completed;
-	//} else if (body.hasOwnProperty('completed')) {
-	//	//Bad
-	//	return res.status(400).send();
-	//}
-
-	//if (body.hasOwnProperty('description') && _.isString(body.description) && body.description.trim().length > 0) {
-	//	validAttributes.description = body.description;
-	//} else if (body.hasOwnProperty('description')) {
-	//	return res.stat(400).send();
-	//}
-
-	//_.extend(matchedTodo, validAttributes);
-	//res.json(matchedTodo);
-
-
-
+	db.user.create(body).then(function(user) {
+		res.json(user.toJSON())
+	}, function(e) {
+		res.status(400).json(e);
+	});
 });
 
 db.sequelize.sync().then(function() {
