@@ -150,7 +150,7 @@ app.post('/users/login', function(req, res) {
 		res.status(401).send();
 	});
 
-
+ 
 });
 
 db.sequelize.sync({force: true}).then(function() {
