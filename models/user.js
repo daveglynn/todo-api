@@ -1,4 +1,4 @@
-var bcrypt = require('bcryptjs');
+var bcrypt = require('../other_modules/bcryptjs');
 var _ = require('underscore')
 
 module.exports = function(sequelize, DataTypes) {
