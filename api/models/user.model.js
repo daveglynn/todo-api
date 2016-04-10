@@ -1,4 +1,4 @@
-var bcrypt = require('../other_modules/bcryptjs');
+var bcrypt = require('../../other_modules/bcryptjs');
 var _ = require('underscore')
 var cryptojs = require('crypto-js');
 var jwt = require('jsonwebtoken');

@@ -1,2 +1,13 @@
+# node files will be downloaded and installed as required
 node_modules/
+
+# local development data only
 data/*.sqlite
+
+#visual studio folders and files
+obj/
+bin/
+Todo-api.njsproj
+Todo-api.sln
+.ntvs_analysis.dat
+.vs/
