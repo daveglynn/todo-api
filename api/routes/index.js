@@ -6,11 +6,6 @@ var middleware = require('../.././middleware.js')(db);
 var ctrlTodo = require('../controllers/todo.controller.js');
 var ctrlUser = require('../controllers/user.controller.js');
 
-router
-	.route('/')
-	.get(function(req, res) {
-		res.send('Welcome to my ToDo Application');
-	});
 
 router
 	.route('/todos')
