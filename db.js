@@ -7,10 +7,17 @@ if (env === 'production') {
 		dialect: 'postgres'
 	});
 } else {
-	sequelize = new Sequelize(undefined, undefined, undefined, {
-		'dialect': 'sqlite',
-		'storage': __dirname + '/data/dev-todo-api.sqlite'
+	var Sequelize = require("sequelize");
+	var sequelize = new Sequelize('Todo', 'postgres', 'Houses22', {
+		host: "localhost",
+		port: 5432,
+		dialect: 'postgres'
 	});
+	//
+	//sequelize = new Sequelize(undefined, undefined, undefined, {
+	//	'dialect': 'sqlite',
+	//	'storage': __dirname + '/data/dev-todo-api.sqlite'
+	//});
 }
 
 var db = {};
