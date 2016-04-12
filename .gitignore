@@ -10,7 +10,7 @@ nodemon.json
 #visual studio folders and files
 obj/
 bin/
-Todo-api.njsproj
-Todo-api.sln
+TodoApp.njsproj
+TodoApp.sln
 .ntvs_analysis.dat
 .vs/
