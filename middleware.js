@@ -1,12 +1,12 @@
  
 var cryptojs = require('crypto-js');
-
+ 
 module.exports = function(db) {
 
 	return {
 		requireAuthentication: function(req, res, next) {
 			var token = req.get('Auth') || '';
-
+ 
 			db.token.findOne({
 				where: {
 					tokenHash: cryptojs.MD5(token).toString()

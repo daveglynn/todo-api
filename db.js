@@ -8,7 +8,7 @@ if (env === 'production') {
 	});
 } else {
 	var Sequelize = require("sequelize");
-	var sequelize = new Sequelize('Todo', 'postgres', 'Houses22', {
+	var sequelize = new Sequelize('d2d', 'postgres', 'Houses22', {
 		host: "localhost",
 		port: 5432,
 		dialect: 'postgres'
@@ -22,6 +22,7 @@ if (env === 'production') {
 
 var db = {};
 
+db.order = sequelize.import(__dirname + '/api/models/order.model.js');
 db.todo = sequelize.import(__dirname + '/api/models/todo.model.js');
 db.user = sequelize.import(__dirname + '/api/models/user.model.js');
 db.token = sequelize.import(__dirname + '/api/models/token.model.js');
