@@ -9,11 +9,15 @@ var ctrlUser = require('../controllers/user.controller.js');
 
 router
 	.route('/todos')
-	.get(middleware.requireAuthentication, ctrlTodo.todosGet);
+	.get(middleware.requireAuthentication, ctrlTodo.todosGetByUserId);
+
+router
+	.route('/todos/all')
+	.get(middleware.requireAuthentication, ctrlTodo.todosGetAll);
 
 router
 	.route('/todos/:id')
-	.get(middleware.requireAuthentication, ctrlTodo.todosGetId);
+	.get(middleware.requireAuthentication, ctrlTodo.todosGetById);
 
 router
 	.route('/todos')

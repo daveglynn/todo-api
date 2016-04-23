@@ -27,7 +27,6 @@ db.todo = sequelize.import(__dirname + '/api/models/todo.model.js');
 db.user = sequelize.import(__dirname + '/api/models/user.model.js');
 db.token = sequelize.import(__dirname + '/api/models/token.model.js');
 
-
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 

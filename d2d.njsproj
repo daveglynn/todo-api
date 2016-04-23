@@ -18,6 +18,8 @@
   <ItemGroup>
     <Content Include="nodemon.json" />
     <Content Include="package.json" />
+    <Compile Include="api\business\common.business.js" />
+    <Compile Include="api\controllers\order.controller.js" />
     <Compile Include="api\models\todo.model.js" />
     <Compile Include="app.js" />
     <Compile Include="db.js" />
@@ -55,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="api" />
+    <Folder Include="api\business\" />
     <Folder Include="api\controllers" />
     <Folder Include="api\models" />
     <Folder Include="api\routes" />
