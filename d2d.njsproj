@@ -19,6 +19,7 @@
     <Content Include="nodemon.json" />
     <Content Include="package.json" />
     <Compile Include="api\business\common.business.js" />
+    <Compile Include="api\business\todo.business.js" />
     <Compile Include="api\controllers\order.controller.js" />
     <Compile Include="api\models\todo.model.js" />
     <Compile Include="app.js" />

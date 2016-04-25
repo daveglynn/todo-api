@@ -6,27 +6,17 @@
 var db = require('../.././db.js');
 var _ = require('underscore');
 var common = require('../business/common.business');
-var table = 'todo';
+var business = require('../business/todo.business');
 
 /******************************************************************************************************
  Get All Records - Filtered by TenantId
 ******************************************************************************************************/
 module.exports.todosGetAll = function (req, res) {
     
-    var query = req.query;
     var where = {};
     
-    //set query parameters    
-    if (query.hasOwnProperty('completed') && query.completed === 'true') {
-        where.completed = true;
-    } else if (query.hasOwnProperty('completed') && query.completed === 'false') {
-        where.completed = false;
-    }
-    if (query.hasOwnProperty('q') && query.q.length > 0) {
-        where.description = {
-            $like: '%' + query.q + '%'
-        };
-    }
+    // builds clause
+    where = business.buildlClauseGetAll(req);
     
     //find and return the records    
     db.todo.findAll({
@@ -43,23 +33,11 @@ module.exports.todosGetAll = function (req, res) {
 ******************************************************************************************************/
 module.exports.todosGetByUserId = function(req, res) {
     
-    var query = req.query;
-	var where = {
-		userId: req.user.get('id')
-	};
+	var where = {};
     
-    //set query parameters   
-	if (query.hasOwnProperty('completed') && query.completed === 'true') {
-		where.completed = true;
-	} else if (query.hasOwnProperty('completed') && query.completed === 'false') {
-		where.completed = false;
-	}
-	if (query.hasOwnProperty('q') && query.q.length > 0) {
-		where.description = {
-			$like: '%' + query.q + '%'
-		};
-	}
-    
+    // builds clause
+    where = business.buildlClauseGetByUserId(req);
+
     //find and return the records  
 	db.todo.findAll({
 		where: where
@@ -76,15 +54,14 @@ module.exports.todosGetByUserId = function(req, res) {
 ******************************************************************************************************/
 module.exports.todosGetById = function(req, res) {
     
-    //get id from request
-	var todoId = parseInt(req.params.id, 10);
-    
+    var where = {};
+
+    // builds clause
+    where = business.buildlClauseGetById(req);
+
     //find and return the records 
 	db.todo.findOne({
-		where: {
-			id: todoId,
-			userId: req.user.get('id')
-		}
+		where: where
 	}).then(function(todo) {
 		if (!!todo) {
 			res.json(todo.toJSON());
@@ -102,8 +79,7 @@ module.exports.todosGetById = function(req, res) {
 module.exports.todosPost = function(req, res) {
     
     // pick appropiate fields
-    //var body = _.pick(req.body, 'description', 'completed');
-    var body = common.setBody(req, table);
+    var body = business.cleanPost(req);
 
     // create record on database, refresh and return local record to client
     db.todo.create(body).then(function (todo) {
@@ -122,27 +98,20 @@ module.exports.todosPost = function(req, res) {
 ******************************************************************************************************/
 module.exports.todosPut = function(req, res) {
     
-    //get id from request
-    var todoId = parseInt(req.params.id, 10);
-    
+    var where = {};
+
     // pick appropiate fields
-	var body = _.pick(req.body, 'description', 'completed');
+    var body = business.cleanPost(req);
     
     // set the attributes to update
-    var attributes = {};
-	if (body.hasOwnProperty('completed')) {
-		attributes.completed = body.completed;
-	}
-	if (body.hasOwnProperty('description')) {
-		attributes.description = body.description;
-	}
+    var attributes = business.prepareForUpdate(req);
     
+    // builds clause
+    where = business.buildClausePut(req);
+
     // find record on database, update record and return to client
 	db.todo.findOne({
-		where: {
-			id: todoId,
-			userId: req.user.get('id')
-		}
+		where: where
 	}).then(function(todo) {
 		if (todo) {
 			todo.update(attributes).then(function(todo) {
@@ -163,15 +132,14 @@ module.exports.todosPut = function(req, res) {
 ******************************************************************************************************/
 module.exports.todosDelete = function (req, res) {
     
-    //get id from request
-    var todoId = parseInt(req.params.id, 10);
+    var where = {};
     
+    // builds clause
+    where = business.buildClauseDelete(req);
+
     // delete record on database
     db.todo.destroy({
-        where: {
-            id: todoId,
-            userId: req.user.get('id')
-        }
+        where: where
     }).then(function (rowsDeleted) {
         if (rowsDeleted === 0) {
             res.status(404).json({
