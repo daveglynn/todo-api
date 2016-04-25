@@ -16,8 +16,9 @@ module.exports.todosGetAll = function (req, res) {
     var where = {};
     
     // builds clause
-    where = business.buildlClauseGetAll(req);
-    
+    where = common.setClauseGetAll(req);
+    where = business.setClauseQuery(req.query, where);
+
     //find and return the records    
     db.todo.findAll({
         where: where
@@ -36,7 +37,8 @@ module.exports.todosGetByUserId = function(req, res) {
 	var where = {};
     
     // builds clause
-    where = business.buildlClauseGetByUserId(req);
+    where = common.setClauseGetByUserId(req);
+    where = business.setClauseQuery(req.query, where);
 
     //find and return the records  
 	db.todo.findAll({
@@ -48,7 +50,6 @@ module.exports.todosGetByUserId = function(req, res) {
 	})
 };
  
-
 /******************************************************************************************************
  Get a Record created by Id - Filtered by TenantId
 ******************************************************************************************************/
@@ -57,7 +58,7 @@ module.exports.todosGetById = function(req, res) {
     var where = {};
 
     // builds clause
-    where = business.buildlClauseGetById(req);
+    where = common.setClauseGetById(req);
 
     //find and return the records 
 	db.todo.findOne({
@@ -107,7 +108,7 @@ module.exports.todosPut = function(req, res) {
     var attributes = business.prepareForUpdate(req);
     
     // builds clause
-    where = business.buildClausePut(req);
+    where = common.setClausePut(req);
 
     // find record on database, update record and return to client
 	db.todo.findOne({
@@ -135,7 +136,7 @@ module.exports.todosDelete = function (req, res) {
     var where = {};
     
     // builds clause
-    where = business.buildClauseDelete(req);
+    where = common.setClauseDelete(req);
 
     // delete record on database
     db.todo.destroy({
