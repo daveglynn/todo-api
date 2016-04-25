@@ -22,6 +22,7 @@ if (env === 'production') {
 
 var db = {};
 
+db.tenant = sequelize.import(__dirname + '/api/models/tenant.model.js');
 db.order = sequelize.import(__dirname + '/api/models/order.model.js');
 db.todo = sequelize.import(__dirname + '/api/models/todo.model.js');
 db.user = sequelize.import(__dirname + '/api/models/user.model.js');
