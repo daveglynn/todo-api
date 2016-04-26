@@ -28,28 +28,7 @@ module.exports.tenantsGetAll = function (req, res) {
         res.status(500).send();
     })
 };
-
-/******************************************************************************************************
- Get All Records created by UserId 
-******************************************************************************************************/
-module.exports.tenantsGetByUserId = function (req, res) {
-    
-    var where = {};
-    
-    // builds clause
-    where = common.setClauseGetByUserId(req);
-    where = business.setClauseQuery(req.query, where);
-    
-    //find and return the records  
-    db.tenant.findAll({
-        where: where
-    }).then(function (tenants) {
-        res.json(tenants);
-    }, function (e) {
-        res.status(500).send();
-    })
-};
-
+ 
 /******************************************************************************************************
  Get a Record created by Id 
 ******************************************************************************************************/
@@ -79,20 +58,21 @@ module.exports.tenantsGetById = function (req, res) {
 ******************************************************************************************************/
 module.exports.tenantsPost = function (req, res) {
     
+    // add createdBy
+    req.body.createdBy = common.setUserBy(req);
+      
     // pick appropiate fields
     var body = business.cleanPost(req);
-    
+
     // create record on database, refresh and return local record to client
     db.tenant.create(body).then(function (tenant) {
-        req.user.addTodo(tenant).then(function () {
-            return tenant.reload();
-        }).then(function (tenant) {
-            res.json(tenant.toJSON());
-        });
+            res.json(tenant.toJSON()) 
     }, function (e) {
         res.status(400).json(e);
     });
 };
+
+
 
 /******************************************************************************************************
  Update a Record 

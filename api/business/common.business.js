@@ -53,6 +53,12 @@ module.exports = {
         };
         return where;
 
+    },
+    
+    setUserBy: function (req) {
+        
+        return req.user.get('id');
+
     }
 };
  

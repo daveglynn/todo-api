@@ -7,6 +7,11 @@
                 len: [1, 250]
             }
         },
+        active: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false
+        },
         createdBy: {
             type: DataTypes.INTEGER,
             allowNull: false,

@@ -14,6 +14,8 @@ module.exports.usersPost = function(req, res) {
 };
 
 
+
+
 module.exports.usersLogin = function(req, res) {
 	var body = _.pick(req.body, 'email', 'password');
 	var userInstance;
