@@ -4,7 +4,7 @@ var _ = require('underscore');
 module.exports.usersPost = function(req, res) {
 
 	//remove unnecessary data
-	var body = _.pick(req.body, 'email', 'password');
+	var body = _.pick(req.body, 'email', 'password', 'tenantId', 'admin');
 
 	db.user.create(body).then(function(user) {
 		res.json(user.toPublicJSON())

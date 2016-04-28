@@ -25,8 +25,10 @@ module.exports = {
 
     },
     
-    setClauseQuery: function (query, where) {
+    setClauseQuery: function (query) {
         
+        var where = {};
+
         //set query parameters   
         if (query.hasOwnProperty('active') && query.active === 'true') {
             where.active = true;

@@ -2,24 +2,33 @@
  business layer
 ******************************************************************************************************/
 var _ = require('underscore');
+var common = require('../business/common.business');
 
 module.exports = {
     
-    cleanPost: function (req) {
+    setPost: function (req) {
         
-        return _.pick(req.body, 'description', 'completed');
+        //clean post
+        var body = _.pick(req.body, 'description', 'completed');
+        
+        //add tenant
+        body.tenantId = common.modelTenantId(req);
+
+        return body;
 
     },
 
-    prepareForUpdate: function (req) {
+    prepareForUpdate: function (body) {
         
-        var body = req.body;
         var attributes = {};
         if (body.hasOwnProperty('completed')) {
             attributes.completed = body.completed;
         }
         if (body.hasOwnProperty('description')) {
             attributes.description = body.description;
+        }
+        if (body.hasOwnProperty('tenantId')) {
+            attributes.tenantId = body.tenantId;
         }
         return attributes;
 

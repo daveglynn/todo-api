@@ -16,7 +16,7 @@ module.exports.tenantsGetAll = function (req, res) {
     var where = {};
     
     // builds clause
-    where = common.setClauseGetAll(req);
+    where = common.setClauseAll(req);
     where = business.setClauseQuery(req.query, where);
     
     //find and return the records    
@@ -37,7 +37,7 @@ module.exports.tenantsGetById = function (req, res) {
     var where = {};
     
     // builds clause
-    where = common.setClauseGetById(req);
+    where = common.setClauseId(req);
     
     //find and return the records 
     db.tenant.findOne({
@@ -59,14 +59,14 @@ module.exports.tenantsGetById = function (req, res) {
 module.exports.tenantsPost = function (req, res) {
     
     // add createdBy
-    req.body.createdBy = common.setUserBy(req);
-      
+    req.body.createdBy = common.modelUserId(req);
+    
     // pick appropiate fields
     var body = business.cleanPost(req);
-
+    
     // create record on database, refresh and return local record to client
     db.tenant.create(body).then(function (tenant) {
-            res.json(tenant.toJSON()) 
+        res.json(tenant.toJSON())
     }, function (e) {
         res.status(400).json(e);
     });
@@ -88,7 +88,7 @@ module.exports.tenantsPut = function (req, res) {
     var attributes = business.prepareForUpdate(req);
     
     // builds clause
-    where = common.setClausePut(req);
+    where = common.setClauseId(req);
     
     // find record on database, update record and return to client
     db.tenant.findOne({
@@ -116,7 +116,7 @@ module.exports.tenantsDelete = function (req, res) {
     var where = {};
     
     // builds clause
-    where = common.setClauseDelete(req);
+    where = common.setClauseId(req);
     
     // delete record on database
     db.tenant.destroy({

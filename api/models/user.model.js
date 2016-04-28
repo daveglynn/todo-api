@@ -5,6 +5,11 @@ var jwt = require('jsonwebtoken');
 
 module.exports = function(sequelize, DataTypes) {
     var user = sequelize.define('user', {
+        admin: {
+            type: DataTypes.BOOLEAN,
+			allowNull: false,
+            defaultValue: false
+        },
 		email: {
 			type: DataTypes.STRING,
 			allowNull: false,

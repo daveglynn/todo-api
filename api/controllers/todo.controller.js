@@ -13,11 +13,11 @@ var business = require('../business/todo.business');
 ******************************************************************************************************/
 module.exports.todosGetAll = function (req, res) {
     
-    var where = {};
-    
     // builds clause
-    where = common.setClauseGetAll(req);
+    where = {};
+    where = common.setClauseAll(req, where);
     where = business.setClauseQuery(req.query, where);
+    where = common.setClauseTenant(req, where);
 
     //find and return the records    
     db.todo.findAll({
@@ -34,11 +34,11 @@ module.exports.todosGetAll = function (req, res) {
 ******************************************************************************************************/
 module.exports.todosGetByUserId = function(req, res) {
     
-	var where = {};
-    
     // builds clause
-    where = common.setClauseGetByUserId(req);
+    var where = {};    
+    where = common.setClauseUserId(req, where);
     where = business.setClauseQuery(req.query, where);
+    where = common.setClauseTenant(req, where);
 
     //find and return the records  
 	db.todo.findAll({
@@ -55,10 +55,10 @@ module.exports.todosGetByUserId = function(req, res) {
 ******************************************************************************************************/
 module.exports.todosGetById = function(req, res) {
     
-    var where = {};
-
     // builds clause
-    where = common.setClauseGetById(req);
+    var where = {};    
+    where = common.setClauseIdUserId(req, where);
+    where = common.setClauseTenant(req, where);
 
     //find and return the records 
 	db.todo.findOne({
@@ -80,8 +80,8 @@ module.exports.todosGetById = function(req, res) {
 module.exports.todosPost = function(req, res) {
     
     // pick appropiate fields
-    var body = business.cleanPost(req);
-
+    var body = business.setPost(req);
+    
     // create record on database, refresh and return local record to client
     db.todo.create(body).then(function (todo) {
         req.user.addTodo(todo).then(function () {
@@ -99,16 +99,16 @@ module.exports.todosPost = function(req, res) {
 ******************************************************************************************************/
 module.exports.todosPut = function(req, res) {
     
-    var where = {};
-
     // pick appropiate fields
-    var body = business.cleanPost(req);
+    var body = business.setPost(req);
     
     // set the attributes to update
-    var attributes = business.prepareForUpdate(req);
+    var attributes = business.prepareForUpdate(body);
     
     // builds clause
-    where = common.setClausePut(req);
+    var where = {};
+    where = common.setClauseIdUserId(req, where);
+    where = common.setClauseTenant(req, where);
 
     // find record on database, update record and return to client
 	db.todo.findOne({
@@ -133,10 +133,10 @@ module.exports.todosPut = function(req, res) {
 ******************************************************************************************************/
 module.exports.todosDelete = function (req, res) {
     
-    var where = {};
-    
     // builds clause
-    where = common.setClauseDelete(req);
+    var where = {};    
+    where = common.setClauseIdUserId(req, where);
+    where = common.setClauseTenant(req, where);
 
     // delete record on database
     db.todo.destroy({

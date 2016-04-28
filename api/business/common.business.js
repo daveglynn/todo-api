@@ -1,4 +1,6 @@
-﻿/******************************************************************************************************
+﻿var db = require('../.././db.js');
+
+/******************************************************************************************************
  common business layer
 ******************************************************************************************************/
 var _ = require('underscore');
@@ -6,59 +8,57 @@ var _ = require('underscore');
 module.exports = {
     
 
-    setClauseGetAll: function (req) {
+    setClauseAll: function (req,where ) {
 
-        var where = {};
         return where;
 
     },
+
+    setClauseTenant: function (req, where) {
+
+        where.tenantId = this.modelTenantId(req);
+        return where;
+
+    },
+
     
-    setClauseGetByUserId: function (req) {
+    setClauseUserId: function (req, where ) {
         
-        var where = {
-            userId: req.user.get('id')
-        };
+        where. userId = req.user.get('id')
         return where;
 
     },
     
-    setClauseGetById: function (req) {
+     
+    setClauseIdUserId: function (req, where) {
         
-        var id = parseInt(req.params.id, 10);
-        var where = {
-            id: id,
-            userId: req.user.get('id')
-        };
+        where.id = parseInt(req.params.id, 10);
+        where.userId = req.user.get('id')
         return where;
 
     },
     
-    setClausePut: function (req) {
-        
-        var id = parseInt(req.params.id, 10);
-        var where = {
-            id: id,
-            userId: req.user.get('id')
-        };
-        return where;
-
-    },
-    
-    setClauseDelete: function (req) {
+    setClauseId: function (req) {
         
         var id = parseInt(req.params.id, 10);
         var where = {
-            id: id,
-            userId: req.user.get('id')
+            id: id
         };
         return where;
 
     },
     
-    setUserBy: function (req) {
+    modelUserId: function (req) {
         
         return req.user.get('id');
 
+    },
+    
+    modelTenantId: function (req) {
+        
+        return req.user.get('tenantId');
+
     }
+
 };
  

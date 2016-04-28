@@ -33,6 +33,9 @@ db.Sequelize = Sequelize;
 
 db.user.belongsTo(db.tenant);
 db.tenant.hasMany(db.user);
+ 
+db.todo.belongsTo(db.tenant);
+db.tenant.hasMany(db.todo);
 
 db.todo.belongsTo(db.user);
 db.user.hasMany(db.todo);
