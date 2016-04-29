@@ -14,7 +14,7 @@ module.exports = {
         //add tenant
         body.tenantId = common.modelTenantId(req);
         
-        //add createdBy
+        //add createdBy,updatedBy
         if (mode = 'C') {
             body.createdBy = common.modelUserId(req);
         } else {

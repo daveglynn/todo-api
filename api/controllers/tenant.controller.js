@@ -58,18 +58,15 @@ module.exports.tenantsGetById = function (req, res) {
 module.exports.tenantsPost = function (req, res) {
     
     // pick appropiate fields 
-    var body = business.setPost(req);
+    var body = business.setPost(req,'C');
     
     // create record on database, refresh and return local record to client
     db.tenant.create(body).then(function (tenant) {
-        req.user.addTenant(tenant).then(function () {
-            return tenant.reload();
-        }).then(function (tenant) {
-            res.json(tenant.toJSON());
-        });
+        res.json(tenant.toJSON())
     }, function (e) {
         res.status(400).json(e);
     });
+
 };
 
 /******************************************************************************************************
@@ -78,14 +75,14 @@ module.exports.tenantsPost = function (req, res) {
 module.exports.tenantsPut = function (req, res) {
     
     // pick appropiate fields 
-    var body = business.setPost(req);
+    var body = business.setPost(req, 'U');
     
     // set the attributes to update
     var attributes = business.prepareForUpdate(body);
     
     // builds clause
     var where = {};
-    where = common.setClauseIdUserId(req, where);
+    where = common.setClauseId(req, where);
     
     // find record on database, update record and return to client
     db.tenant.findOne({
@@ -112,7 +109,7 @@ module.exports.tenantsDelete = function (req, res) {
     
     // builds clause
     var where = {};
-    where = common.setClauseIdUserId(req, where);
+    where = common.setClauseId(req, where);
     
     // delete record on database
     db.tenant.destroy({

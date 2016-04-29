@@ -2,17 +2,21 @@
  business layer
 ******************************************************************************************************/
 var _ = require('underscore');
+var common = require('../business/common.business');
 
 module.exports = {
     
-    setPost: function (req) {
+    setPost: function (req, mode) {
 
         //clean post
         var body = _.pick(req.body, 'name', 'active', 'createdBy');
-        
-        //add createdBy
-        body.createdBy = common.modelUserId(req);
 
+        //add createdBy,updatedBy
+        if (mode = 'C') {
+            body.createdBy = common.modelUserId(req);
+        } else {
+            body.updatedBy = common.modelUserId(req);
+        }
         return body;
     },
     
@@ -35,9 +39,7 @@ module.exports = {
 
     },
     
-    setClauseQuery: function (query) {
-        
-        var where = {};
+    setClauseQuery: function (query, where) {
 
         //set query parameters   
         if (query.hasOwnProperty('active') && query.active === 'true') {
