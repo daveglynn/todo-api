@@ -13,10 +13,9 @@ var business = require('../business/tenant.business');
 ******************************************************************************************************/
 module.exports.tenantsGetAll = function (req, res) {
     
-    var where = {};
-    
     // builds clause
-    where = common.setClauseAll(req);
+    where = {};
+    where = common.setClauseAll(req, where);
     where = business.setClauseQuery(req.query, where);
     
     //find and return the records    
@@ -28,16 +27,16 @@ module.exports.tenantsGetAll = function (req, res) {
         res.status(500).send();
     })
 };
- 
+
+
 /******************************************************************************************************
  Get a Record created by Id 
 ******************************************************************************************************/
 module.exports.tenantsGetById = function (req, res) {
     
-    var where = {};
-    
     // builds clause
-    where = common.setClauseId(req);
+    var where = {};
+    where = common.setClauseId(req, where);
     
     //find and return the records 
     db.tenant.findOne({
@@ -58,37 +57,35 @@ module.exports.tenantsGetById = function (req, res) {
 ******************************************************************************************************/
 module.exports.tenantsPost = function (req, res) {
     
-    // add createdBy
-    req.body.createdBy = common.modelUserId(req);
-    
-    // pick appropiate fields
-    var body = business.cleanPost(req);
+    // pick appropiate fields 
+    var body = business.setPost(req);
     
     // create record on database, refresh and return local record to client
     db.tenant.create(body).then(function (tenant) {
-        res.json(tenant.toJSON())
+        req.user.addTenant(tenant).then(function () {
+            return tenant.reload();
+        }).then(function (tenant) {
+            res.json(tenant.toJSON());
+        });
     }, function (e) {
         res.status(400).json(e);
     });
 };
-
-
 
 /******************************************************************************************************
  Update a Record 
 ******************************************************************************************************/
 module.exports.tenantsPut = function (req, res) {
     
-    var where = {};
-    
-    // pick appropiate fields
-    var body = business.cleanPost(req);
+    // pick appropiate fields 
+    var body = business.setPost(req);
     
     // set the attributes to update
-    var attributes = business.prepareForUpdate(req);
+    var attributes = business.prepareForUpdate(body);
     
     // builds clause
-    where = common.setClauseId(req);
+    var where = {};
+    where = common.setClauseIdUserId(req, where);
     
     // find record on database, update record and return to client
     db.tenant.findOne({
@@ -113,10 +110,9 @@ module.exports.tenantsPut = function (req, res) {
 ******************************************************************************************************/
 module.exports.tenantsDelete = function (req, res) {
     
-    var where = {};
-    
     // builds clause
-    where = common.setClauseId(req);
+    var where = {};
+    where = common.setClauseIdUserId(req, where);
     
     // delete record on database
     db.tenant.destroy({

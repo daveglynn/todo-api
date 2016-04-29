@@ -1,10 +1,12 @@
 var db = require('../.././db.js');
 var _ = require('underscore');
+var common = require('../business/common.business');
+var business = require('../business/user.business');
 
 module.exports.usersPost = function(req, res) {
 
-	//remove unnecessary data
-	var body = _.pick(req.body, 'email', 'password', 'tenantId', 'admin');
+    // pick appropiate fields and set tenant
+    var body = business.setPost(req, 'C');
 
 	db.user.create(body).then(function(user) {
 		res.json(user.toPublicJSON())
@@ -12,9 +14,6 @@ module.exports.usersPost = function(req, res) {
 		res.status(400).json(e);
 	});
 };
-
-
-
 
 module.exports.usersLogin = function(req, res) {
 	var body = _.pick(req.body, 'email', 'password');

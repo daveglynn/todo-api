@@ -6,14 +6,20 @@ var common = require('../business/common.business');
 
 module.exports = {
     
-    setPost: function (req) {
+    setPost: function (req,mode) {
         
         //clean post
         var body = _.pick(req.body, 'description', 'completed');
         
         //add tenant
         body.tenantId = common.modelTenantId(req);
-
+        
+        //add createdBy
+        if (mode = 'C') {
+            body.createdBy = common.modelUserId(req);
+        } else {
+            body.updatedBy = common.modelUserId(req);
+        }
         return body;
 
     },
@@ -27,8 +33,11 @@ module.exports = {
         if (body.hasOwnProperty('description')) {
             attributes.description = body.description;
         }
-        if (body.hasOwnProperty('tenantId')) {
-            attributes.tenantId = body.tenantId;
+        if (body.hasOwnProperty('createdBy')) {
+            attributes.tenantId = body.createdBy;
+        }
+        if (body.hasOwnProperty('updatedBy')) {
+            attributes.tenantId = body.createdBy;
         }
         return attributes;
 

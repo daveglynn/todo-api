@@ -5,21 +5,31 @@ var _ = require('underscore');
 
 module.exports = {
     
-    cleanPost: function (req) {
-        
-        return _.pick(req.body, 'name', 'active', 'createdBy');
+    setPost: function (req) {
 
+        //clean post
+        var body = _.pick(req.body, 'name', 'active', 'createdBy');
+        
+        //add createdBy
+        body.createdBy = common.modelUserId(req);
+
+        return body;
     },
     
-    prepareForUpdate: function (req) {
+    prepareForUpdate: function (body) {
         
-        var body = req.body;
         var attributes = {};
         if (body.hasOwnProperty('active')) {
             attributes.active = body.active;
         }
         if (body.hasOwnProperty('name')) {
             attributes.name = body.name;
+        }
+        if (body.hasOwnProperty('createdBy')) {
+            attributes.tenantId = body.createdBy;
+        }
+        if (body.hasOwnProperty('updatedBy')) {
+            attributes.tenantId = body.createdBy;
         }
         return attributes;
 

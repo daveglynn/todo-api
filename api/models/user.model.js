@@ -5,10 +5,10 @@ var jwt = require('jsonwebtoken');
 
 module.exports = function(sequelize, DataTypes) {
     var user = sequelize.define('user', {
-        admin: {
-            type: DataTypes.BOOLEAN,
-			allowNull: false,
-            defaultValue: false
+        role: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+            defaultValue: null
         },
 		email: {
 			type: DataTypes.STRING,
@@ -43,7 +43,17 @@ module.exports = function(sequelize, DataTypes) {
 				this.setDataValue('password_hash', hashedPassword);
 
 			}
-		}
+        },
+        createdBy: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+            defaultValue: null
+        },
+        updatedBy: {
+            type: DataTypes.INTEGER,
+            allowNull: true,
+            defaultValue: null
+        }
 	}, {
 		hooks: {
 			beforeValidate: function(user, options) {

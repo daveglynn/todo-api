@@ -14,7 +14,7 @@ module.exports = {
 
     },
 
-    setClauseTenant: function (req, where) {
+    setClauseTenantId: function (req, where) {
 
         where.tenantId = this.modelTenantId(req);
         return where;
@@ -58,7 +58,17 @@ module.exports = {
         
         return req.user.get('tenantId');
 
-    }
+    },
+
+    setAttributes: function (req) {
+    
+        var attributes = {
+            exclude: ['tenantId']
+        };
+        
+        return attributes;
+
+}
 
 };
  

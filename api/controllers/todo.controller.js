@@ -17,10 +17,12 @@ module.exports.todosGetAll = function (req, res) {
     where = {};
     where = common.setClauseAll(req, where);
     where = business.setClauseQuery(req.query, where);
-    where = common.setClauseTenant(req, where);
+    where = common.setClauseTenantId(req, where);
+    var attributes = common.setAttributes();
 
     //find and return the records    
     db.todo.findAll({
+        attributes: attributes,
         where: where
     }).then(function (todos) {
         res.json(todos);
@@ -38,10 +40,12 @@ module.exports.todosGetByUserId = function(req, res) {
     var where = {};    
     where = common.setClauseUserId(req, where);
     where = business.setClauseQuery(req.query, where);
-    where = common.setClauseTenant(req, where);
-
+    where = common.setClauseTenantId(req, where);
+    var attributes = common.setAttributes();
+     
     //find and return the records  
-	db.todo.findAll({
+    db.todo.findAll({
+        attributes: attributes,
 		where: where
 	}).then(function(todos) {
 		res.json(todos);
@@ -58,14 +62,16 @@ module.exports.todosGetById = function(req, res) {
     // builds clause
     var where = {};    
     where = common.setClauseIdUserId(req, where);
-    where = common.setClauseTenant(req, where);
+    where = common.setClauseTenantId(req, where);
+    var attributes = common.setAttributes();
 
     //find and return the records 
-	db.todo.findOne({
+    db.todo.findOne({
+        attributes: attributes,
 		where: where
 	}).then(function(todo) {
 		if (!!todo) {
-			res.json(todo.toJSON());
+			res.json(todo.toPublicJSON());
 		} else {
 			res.status(404).send();
 		}
@@ -79,15 +85,15 @@ module.exports.todosGetById = function(req, res) {
 ******************************************************************************************************/
 module.exports.todosPost = function(req, res) {
     
-    // pick appropiate fields
-    var body = business.setPost(req);
+    // pick appropiate fields and set tenant
+    var body = business.setPost(req, 'C');
     
     // create record on database, refresh and return local record to client
     db.todo.create(body).then(function (todo) {
         req.user.addTodo(todo).then(function () {
             return todo.reload();  
         }).then(function (todo) {
-           res.json(todo.toJSON()); 
+            res.json(todo.toPublicJSON());
 		});
 	}, function(e) {
 		res.status(400).json(e);
@@ -99,8 +105,8 @@ module.exports.todosPost = function(req, res) {
 ******************************************************************************************************/
 module.exports.todosPut = function(req, res) {
     
-    // pick appropiate fields
-    var body = business.setPost(req);
+    // pick appropiate fields and set tenant
+    var body = business.setPost(req, 'U');
     
     // set the attributes to update
     var attributes = business.prepareForUpdate(body);
@@ -108,7 +114,7 @@ module.exports.todosPut = function(req, res) {
     // builds clause
     var where = {};
     where = common.setClauseIdUserId(req, where);
-    where = common.setClauseTenant(req, where);
+    where = common.setClauseTenantId(req, where);
 
     // find record on database, update record and return to client
 	db.todo.findOne({
@@ -116,7 +122,7 @@ module.exports.todosPut = function(req, res) {
 	}).then(function(todo) {
 		if (todo) {
 			todo.update(attributes).then(function(todo) {
-				res.json(todo.toJSON());
+				res.json(todo.toPublicJSON());
 			}, function(e) {
 				res.status(400).json(e);
 			});
@@ -136,7 +142,7 @@ module.exports.todosDelete = function (req, res) {
     // builds clause
     var where = {};    
     where = common.setClauseIdUserId(req, where);
-    where = common.setClauseTenant(req, where);
+    where = common.setClauseTenantId(req, where);
 
     // delete record on database
     db.todo.destroy({
