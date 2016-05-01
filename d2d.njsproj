@@ -24,6 +24,7 @@
     <Content Include="nodemon.json" />
     <Content Include="package.json" />
     <Compile Include="api\business\common.business.js" />
+    <Compile Include="api\business\constants.business.js" />
     <Compile Include="api\business\tenant.business.js" />
     <Compile Include="api\business\todo.business.js" />
     <Compile Include="api\business\user.business.js" />

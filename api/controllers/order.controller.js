@@ -1,4 +1,5 @@
-﻿var db = require('../.././db.js');
+﻿"use strict";
+var db = require('../.././db.js');
 var _ = require('underscore');
 
 module.exports.ordersGetByUserId = function (req, res) {

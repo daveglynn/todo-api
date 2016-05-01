@@ -1,20 +1,23 @@
-
 /******************************************************************************************************
  import Required Modules
 ******************************************************************************************************/
-
+"use strict";
 var db = require('../.././db.js');
 var _ = require('underscore');
 var common = require('../business/common.business');
 var business = require('../business/todo.business');
+var constants = require('../business/constants.business');
 
 /******************************************************************************************************
  Get All Records - Filtered by TenantId
 ******************************************************************************************************/
 module.exports.todosGetAll = function (req, res) {
     
+    console.log(constants.PI);
+    console.log(constants.PI);  
+
     // builds clause
-    where = {};
+    var where = {};
     where = common.setClauseAll(req, where);
     where = business.setClauseQuery(req.query, where);
     where = common.setClauseTenantId(req, where);

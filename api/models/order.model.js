@@ -1,4 +1,5 @@
-module.exports = function(sequelize, DataTypes) {
+"use strict";
+module.exports = function (sequelize, DataTypes) {
 	return sequelize.define('order', {
 		orderStatusId: {
 			type: DataTypes.INTEGER,

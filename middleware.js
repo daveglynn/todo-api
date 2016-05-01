@@ -1,4 +1,4 @@
- 
+"use strict"; 
 var cryptojs = require('crypto-js');
  
 module.exports = function(db) {
